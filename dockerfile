@@ -1,20 +1,26 @@
-# Sử dụng một hình ảnh Node.js để build ứng dụng React
-FROM node:14 as builder
-
-WORKDIR /app
-COPY package*.json ./
-RUN npm install
-COPY . .
-RUN npm run build
-
-# Sử dụng hình ảnh Nginx nhẹ để chứa ứng dụng build
-FROM nginx:alpine
-
-# Sao chép các tệp tin từ builder stage (ứng dụng đã được build)
-COPY --from=builder /app/build /usr/share/nginx/html
-
-# Nginx sẽ chạy trên cổng 80
-EXPOSE 80
-
-# Lệnh để khởi động Nginx
-CMD ["nginx", "-g", "daemon off;"]
+    # 1. For build React app
+    FROM node:14 AS development
+    # Set working directory
+    WORKDIR /app
+    #
+    COPY package.json /app/package.json
+    COPY package-lock.json /app/package-lock.json
+    RUN npm install
+    RUN npm ci
+    COPY . /app
+    ENV CI=true
+    ENV PORT=3000
+    CMD [ "npm", "start" ]
+    FROM development AS build
+    RUN npm run build
+    # 2. For Nginx setup
+    FROM nginx:alpine
+    # Copy config nginx
+    COPY --from=build /app/.nginx/nginx.conf /etc/nginx/conf.d/default.conf
+    WORKDIR /usr/share/nginx/html
+    # Remove default nginx static assets
+    RUN rm -rf ./*
+    # Copy static assets from builder stage
+    COPY --from=build /app/build .
+    # Containers run nginx with global directives and daemon off
+    ENTRYPOINT ["nginx", "-g", "daemon off;"]

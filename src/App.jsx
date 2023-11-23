@@ -1,25 +1,13 @@
-import React from 'react';
-import logo from './logo.svg';
+
 import './App.css';
 
 import JsonTable from './GenTable';
-import JavaCodeAnalyzer from "./scan-java"
 import Diagram from "./draw-class-diagram"
-import ClassEditor from "./use-input-form"
-import { BrowserRouter as Router } from "react-router-dom";
 
 
 
-const pages = [
-  {
-    path: "/class",
-    diagram: ``,
-    title: "Class Diagram",
-    path: "/sequence",
-    diagram: ``,
-    title: "Sequence Diagram",
-  }
-];
+
+const pages = [];
 
 function App() {
   return (

@@ -1,7 +1,6 @@
 // Diagram.js
 import React, { useState } from "react";
 import encoder from "plantuml-encoder";
-import { Link } from "react-router-dom";
 
 function draw(diagram) {
   return "https://www.plantuml.com/plantuml/svg/" + encoder.encode(diagram);

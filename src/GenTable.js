@@ -5,22 +5,65 @@ const JsonTable = () => {
   const [tableData, setTableData] = useState([]);
   const [copiedData, setCopiedData] = useState('');
 
-  const parseJson = () => {
+  // const parseJson = () => {
+  //   try {
+  //     const parsedData = JSON.parse(jsonData);
+  //     const tableRows = Object.entries(parsedData).map(([key, value], index) => ({
+  //       stt: index + 1,
+  //       attribute: key,
+  //       dataType: typeof value,
+  //       description: '',
+  //       required: 'N',
+  //     }));
+  //     setTableData(tableRows);
+  //   } catch (error) {
+  //     console.error('Invalid JSON format', error);
+  //     setTableData([]);
+  //   }
+  // };
+  
+
+  const parseJson = async () => {
     try {
       const parsedData = JSON.parse(jsonData);
-      const tableRows = Object.entries(parsedData).map(([key, value], index) => ({
-        stt: index + 1,
-        attribute: key,
-        dataType: typeof value,
-        description: '',
-        required: 'N',
-      }));
+      // const tableRows = Object.entries(parsedData).map(([key, value], index) => ({
+      //   stt: index + 1,
+      //   attribute: key,
+      //   dataType: typeof value,
+      //   description: '',
+      //   required: 'N',
+      // }));
+      var tableRows = []
+      parseJson2("",parsedData,tableRows)
       setTableData(tableRows);
     } catch (error) {
       console.error('Invalid JSON format', error);
       setTableData([]);
     }
   };
+
+
+  const parseJson2 = (prefix, json, tableRows) =>{
+    for (var key in json) {
+      if(Array.isArray(json[key])){
+        json[key] = json[key][0]
+      }
+      if(typeof json[key] == "object"){
+        const prefixTruyenvao =  prefix + key +"."
+        const subJson = JSON.parse(JSON.stringify(json[key]));
+        parseJson2(prefixTruyenvao, subJson, tableRows)
+      }else{
+        tableRows.push({
+          stt: tableRows.length,
+          attribute: prefix + key,
+          dataType: typeof json[key],
+          description: '',
+          required: 'N',
+        })
+      }
+      
+  }
+  }
 
   const copyToClipboard = () => {
     const tableContent = tableData.map(

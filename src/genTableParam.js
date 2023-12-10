@@ -52,8 +52,9 @@ const JsonTable1 = () => {
   return (
     <div>
       <textarea
-        rows={10}
-        cols={40}
+      id="jsonData"
+      rows="5"
+      className="resize-none border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         value={urlData}
         onChange={(e) => setUrlData(e.target.value)}
       />
@@ -62,29 +63,40 @@ const JsonTable1 = () => {
       <button onClick={copyToClipboard}>Copy Data</button>
 
       {/* Display your table or other components based on tableData */}
-      <table>
-        <thead>
+      <table className="min-w-full border border-gray-300">
+        <thead className="bg-gray-200">
           <tr>
-            <th>STT</th>
-            <th>Attribute</th>
-            <th>DataType</th>
-            <th>Description</th>
-            <th>Required</th>
+            <th className="py-2 px-4 border">STT</th>
+            <th className="py-2 px-4 border">Attribute</th>
+            <th className="py-2 px-4 border">Data Type</th>
+            <th className="py-2 px-4 border">Description</th>
+            <th className="py-2 px-4 border">Required</th>
           </tr>
         </thead>
         <tbody>
           {tableData.map((row) => (
-            <tr key={row.stt}>
-              <td>{row.stt}</td>
-              <td>{row.attribute}</td>
-              <td>{row.dataType}</td>
-              <td>{row.description}</td>
-              <td>{row.required}</td>
+            <tr key={row.attribute}>
+              <td className="py-2 px-4 border">{row.stt}</td>
+              <td className="py-2 px-4 border">{row.attribute}</td>
+              <td className="py-2 px-4 border">{row.dataType}</td>
+              <td className="py-2 px-4 border">
+                <input
+                  type="text"
+                  className="w-full border rounded-md px-2 py-1 focus:outline-none focus:shadow-outline"
+                  value={row.description}
+                  onChange={(e) => {
+                    const updatedData = [...tableData];
+                    updatedData.find((item) => item.attribute === row.attribute).description =
+                      e.target.value;
+                    setTableData(updatedData);
+                  }}
+                />
+              </td>
+              <td className="py-2 px-4 border">{row.required}</td>
             </tr>
           ))}
         </tbody>
       </table>
-
       {/* Display copied data if available */}
       {copiedData && <pre>{copiedData}</pre>}
     </div>

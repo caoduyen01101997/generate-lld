@@ -95,8 +95,8 @@ const JsonTable = () => {
         placeholder="Enter JSON here"
       />
       <br />
-      <button onClick={parseJson}>Generate Table</button>
-      <button onClick={copyToClipboard}>Copy to Clipboard</button>
+      <button class="bg-blue-500 mx-4 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={parseJson}>Tạo bảng</button>
+      <button class="bg-blue-500 mx-4 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={copyToClipboard}>Copy to Clipboard</button>
 
       <div className="container mx-auto my-8">
       <table className="min-w-full border border-gray-300">
